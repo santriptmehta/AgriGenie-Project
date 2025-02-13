@@ -1,4 +1,4 @@
-# 🌾 AgriGenie – AI Chatbot for Farmers & Agribusiness - INPROGRESS 
+# 🌾 AgriGenie – AI Chatbot for Farmers & Agribusiness - IN-PROGRESS 
 
 AgriGenie is an AI-powered chatbot designed to assist farmers and agribusinesses by providing smart recommendations, pest identification, weather-based insights, and product guidance in multiple languages.  
 
