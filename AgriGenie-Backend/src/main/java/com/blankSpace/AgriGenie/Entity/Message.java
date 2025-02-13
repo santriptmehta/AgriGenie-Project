@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
-@Document(collation = "message")
+@Document(collection = "message")
 public class Message {
 
     @Id
@@ -13,6 +13,7 @@ public class Message {
     private String userMessage;
     private String botResponse;
     private LocalDateTime localDateTime;
+
 
     public Message(){
         this.localDateTime = LocalDateTime.now();

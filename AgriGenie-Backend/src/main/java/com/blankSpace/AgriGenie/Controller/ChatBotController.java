@@ -2,6 +2,7 @@ package com.blankSpace.AgriGenie.Controller;
 
 import com.blankSpace.AgriGenie.Entity.Message;
 import com.blankSpace.AgriGenie.Service.ChatBotService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
@@ -21,7 +22,7 @@ public class ChatBotController {
         return chatBotService.getChatBotResponse(userMessage);
     }
     @GetMapping("/history")
-    public List<Message> getChatHistory(){
+    public ResponseEntity<List<Message>> getChatHistory(){
         return chatBotService.getAllMessage();
     }
 }

@@ -3,18 +3,24 @@ package com.blankSpace.AgriGenie.Service;
 
 import com.blankSpace.AgriGenie.Entity.Message;
 import com.blankSpace.AgriGenie.Repository.MessageRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 
 @Service
@@ -55,19 +61,41 @@ public class ChatBotService {
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             String botResponse = responseEntity.getBody();
 
-            Message message = new Message(userMessage, botResponse);
-            messageRepository.save(message);
+            saveMessageTODatabae(userMessage, botResponse);
 
             return botResponse;
 
-
+        }catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Error Creating request JSON" + e.getMessage();
+        }catch (RestClientException e) {
+            e.printStackTrace();
+            return "Error Calling AI Services" + e.getMessage();
         }catch (Exception e){
             e.printStackTrace();
-            return "Error calling AI service: " + e.getMessage();
+            return "An Unexpected error Occured" + e.getMessage();
         }
     }
 
-    public List<Message> getAllMessage(){
-        return messageRepository.findAll();
+    private void saveMessageTODatabae(String userMessage, String botResponse){
+        try{
+            Message message = new Message(userMessage, botResponse);
+            messageRepository.save(message);
+        }catch (DataAccessException e){
+            e.printStackTrace();
+            throw new RuntimeException("Error saving message to the database" + e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("An Unexpected Error while saving the message " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<List<Message>> getAllMessage(){
+        try {
+            return new ResponseEntity<>(messageRepository.findAll(), HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
     }
 }
