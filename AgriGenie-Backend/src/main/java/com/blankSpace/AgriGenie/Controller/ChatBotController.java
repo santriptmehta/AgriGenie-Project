@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chatbot")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ChatBotController {
     private final ChatBotService chatBotService;
 

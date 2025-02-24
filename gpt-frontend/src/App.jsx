@@ -10,6 +10,7 @@ import {
   CssBaseline,
   Button,
   Container,
+  colors,
 } from "@mui/material"
 import {
   Menu as MenuIcon,
@@ -24,7 +25,10 @@ import {
   ExpandMore as ExpandMoreIcon,
   SmartToy as BotIcon,
 } from "@mui/icons-material"
-import { SendIcon } from "lucide-react"
+import { Send, SendIcon } from "lucide-react"
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+
 
 const darkTheme = createTheme({
   palette: {
@@ -39,7 +43,35 @@ const darkTheme = createTheme({
   },
 })
 
-function App() {
+function App(){
+  const [messages, setMessages] = useState([
+    { text: "Hi!", sender: "user" },
+    { text: "Hey Santript! How's it going? I'll be coming soon!", sender: "bot" },
+  ]);
+  const [input, setInput] = useState("");
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const newMessages = [...messages, { text: input, sender: "user" }];
+    setMessages(newMessages);
+    setInput("");
+
+    try {
+      const response = await fetch("http://localhost:8080/api/chatbot/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await response.json();
+      setMessages([...newMessages, { text: data.botResponse, sender: "bot" }]);
+    } catch (error) {
+      console.error("Error communicating with the backend:", error);
+    }
+  };
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -65,39 +97,39 @@ function App() {
         </AppBar>
 
         {/* Chat Area */}
-        <Container maxWidth="md" sx={{ flexGrow: 1, py: 4, overflow: "auto" }}>
-          {/* User Message */}
-          <Paper
-            sx={{
-              p: 2,
-              mb: 2,
-              backgroundColor: "background.default",
-            }}
-          >
-            <Typography color="inherit">Hi!</Typography>
-          </Paper>
+        <Container maxWidth="md" sx={{ flexGrow: 1, py: 4, overflowY: "auto" }}>
+          {messages.map((msg, index) => (
+            <Paper
+              key={index}
+              sx={{
+                p: 2,
+                mb: 2,
+                backgroundColor: msg.sender === "user" ? "background.default" : "background.paper",
+                alignSelf: msg.sender === "user" ? "flex-end" : "flex-start",
+                maxWidth: "80%",
+              }}
+            >
+              {msg.sender === "bot" ? (
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              ) : (
+                <Typography color="inherit">{msg.text}</Typography>
+              )}
 
-          {/* AgriGenie Response */}
-          <Paper
-            sx={{
-              p: 2,
-              mb: 2,
-              backgroundColor: "background.paper",
-            }}
-          >
-            <Typography color="inherit">Hey Santript! How's it going?, I'll be coming soon !</Typography>
-            <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-              <IconButton size="small">
-                <CopyIcon fontSize="small" />
-              </IconButton>
-              <IconButton size="small">
-                <ThumbUp fontSize="small" />
-              </IconButton>
-              <IconButton size="small">
-                <ThumbDown fontSize="small" />
-              </IconButton>
-            </Box>
-          </Paper>
+              {msg.sender === "bot" && (
+                <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                  <IconButton size="small">
+                    <CopyIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small">
+                    <ThumbUp fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small">
+                    <ThumbDown fontSize="small" />
+                  </IconButton>
+                </Box>
+              )}
+            </Paper>
+          ))}
         </Container>
 
         {/* Input Area */}
@@ -113,9 +145,15 @@ function App() {
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center", p: 1 }}>
-                <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Message AgriGenie" />
-                <IconButton>
-                  <SendIcon/>
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="Message AgriGenie"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                />
+                <IconButton onClick={sendMessage}>
+                  <Send />
                 </IconButton>
                 <IconButton>
                   <AddIcon />
@@ -140,7 +178,7 @@ function App() {
         </Box>
       </Box>
     </ThemeProvider>
-  )
+  );
 }
 
 export default App

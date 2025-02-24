@@ -4,6 +4,7 @@ package com.blankSpace.AgriGenie.Service;
 import com.blankSpace.AgriGenie.Entity.Message;
 import com.blankSpace.AgriGenie.Repository.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
@@ -43,6 +44,11 @@ public class ChatBotService {
         String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + geminiApiKey;
 
         try{
+            JsonNode userMessageNode = objectMapper.readTree(userMessage);
+            if (userMessageNode.has("userMessage")) {
+                userMessage = userMessageNode.get("userMessage").asText();
+            }
+
             Map<String, Object> requestBody = new HashMap<>();
             Map<String, Object> content = new HashMap<>();
             Map<String, Object> part = new HashMap<>();
@@ -59,11 +65,23 @@ public class ChatBotService {
             HttpEntity<String> requestEntity = new HttpEntity<>(jsonBody, headers);
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-            String botResponse = responseEntity.getBody();
+            String rawResponse = responseEntity.getBody();
+
+            JsonNode rootNode = objectMapper.readTree(rawResponse);
+            JsonNode textNode = rootNode.path("candidates").get(0).path("content").path("parts").get(0).path("text");
+
+            if(textNode.isMissingNode()){
+                return "Error : No text found in the API response.";
+            }
+            String botResponse = textNode.asText();
 
             saveMessageTODatabae(userMessage, botResponse);
 
-            return botResponse;
+            // Create the required response structure
+            Map<String, String> formattedResponse = new HashMap<>();
+            formattedResponse.put("botResponse", botResponse);
+
+            return objectMapper.writeValueAsString(formattedResponse);
 
         }catch (JsonProcessingException e) {
             e.printStackTrace();
