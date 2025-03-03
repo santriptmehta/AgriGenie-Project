@@ -5,7 +5,6 @@ import com.blankSpace.AgriGenie.Service.ChatBotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Member;
 import java.util.List;
 
 @RestController
@@ -25,5 +24,15 @@ public class ChatBotController {
     @GetMapping("/history")
     public ResponseEntity<List<Message>> getChatHistory(){
         return chatBotService.getAllMessage();
+    }
+    @GetMapping("/machineInfo")
+    public String getMachineInfo(){
+        String os = System.getProperty("os.name");
+        String version = System.getProperty("os.version");
+        String arch = System.getProperty("os.arch");
+        String javaVersion = System.getProperty("java.version");
+        String user = System.getProperty("user.name");
+
+        return "OS : " + os + " ,Version " + version + " ,arch " + arch + " ,Java Version" + javaVersion + " ,user " + user;
     }
 }

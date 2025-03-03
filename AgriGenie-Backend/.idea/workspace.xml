@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b89b05f9-a319-4f33-941f-cb23c557f56f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blankSpace/AgriGenie/Controller/ChatBotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blankSpace/AgriGenie/Controller/ChatBotController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../GitTest.md" beforeDir="false" afterPath="$PROJECT_DIR$/../GitTest.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/blankSpace/AgriGenie/Controller/ChatBotController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/blankSpace/AgriGenie/Controller/ChatBotController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gpt-frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../gpt-frontend/src/main.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +65,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main Run.executor": "Run",
+    "Docker.Dockerfile.executor": "Run",
+    "Maven.AgriGenie [clean].executor": "Run",
+    "Maven.AgriGenie [package].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "Backend-Branch",
@@ -69,7 +76,13 @@
     "settings.editor.selected.configurable": "configurable.group.tools"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+      <command value="mvn package" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Docker.Dockerfile">
     <configuration name="Main Run" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.blankSpace.AgriGenie.AgriGenieApplication" />
       <module name="AgriGenie" />
@@ -85,6 +98,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.Dockerfile" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
