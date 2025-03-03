@@ -7,6 +7,5 @@ import BrainAnimation from './utils/BrainAnimation.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App/>
-    <BrainAnimation/>
   </StrictMode>,
 )
